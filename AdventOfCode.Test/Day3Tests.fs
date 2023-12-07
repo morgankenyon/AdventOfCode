@@ -126,3 +126,70 @@ let ``Can turn number group into number``() =
     let num = Day3.convertNumberGroupToNumber numberGroup
 
     Assert.Equal(467, num)
+
+[<Fact>]
+let ``Can find Number group and keep indexes`` () =
+    let input = "467..114.."
+    let line = input.ToCharArray()
+
+    let numberGroupMap = Day3.findNumberGroupMaps line
+
+    Assert.Equal(6, numberGroupMap.Count)
+    
+    let ids = 
+        numberGroupMap.Values
+        |> Seq.map (fun vv -> vv.Id)
+        
+    let identifierSet = Set.ofSeq ids
+
+    let zeroIndex = numberGroupMap.TryFind 0
+    Assert.True(zeroIndex.IsSome)
+    Assert.Equal(467, zeroIndex.Value.Number)
+
+    let zeroIndex = numberGroupMap.TryFind 1
+    Assert.True(zeroIndex.IsSome)
+    Assert.Equal(467, zeroIndex.Value.Number)
+
+    let zeroIndex = numberGroupMap.TryFind 2
+    Assert.True(zeroIndex.IsSome)
+    Assert.Equal(467, zeroIndex.Value.Number)
+
+    Assert.Equal(2, identifierSet.Count)
+
+[<Fact>]
+let ``Can empty row return empty map`` () =
+    let input = "*"
+    let line = input.ToCharArray()
+
+    let numberGroupMap = Day3.findNumberGroupMaps line
+
+    Assert.Equal(0, numberGroupMap.Count)
+
+[<Fact>]
+let ``Can find unique groups`` () =
+    let numberGroup: Day3.UniqueNumberGroup = { Id = Guid.NewGuid(); Number = 22 }
+
+    let mutable map = Map.empty<int, Day3.UniqueNumberGroup>
+    
+    map <- map.Add(1, numberGroup)
+    map <- map.Add(2, numberGroup)
+    map <- map.Add(3, numberGroup)
+
+    let uniqueNumberGroups = Day3.getThreeSpotsNumberGroups map 2
+
+    Assert.Equal(1, uniqueNumberGroups.Length)
+    
+    let head = uniqueNumberGroups.Head
+
+    Assert.Equal(numberGroup.Id, head.Id)
+    Assert.Equal(22, head.Number)
+
+[<Fact>]
+let ``Can prevent error with empty number group`` () =
+
+    let mutable map = Map.empty<int, Day3.UniqueNumberGroup>
+
+    let uniqueNumberGroups = Day3.getThreeSpotsNumberGroups map 2
+
+    Assert.Equal(0, uniqueNumberGroups.Length)
+    

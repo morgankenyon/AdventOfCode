@@ -14,15 +14,18 @@ let runDaysProblems day =
     | "3" -> Day3.SolveDay()
     | "3a" -> Day3.SolveDayA()
     | "3b" -> Day3.SolveDayB()
+    | "4" -> Day4.SolveDay()
+    | "4a" -> Day4.SolveDayA()
+    | "4b" -> Day4.SolveDayB()
     | _ -> printfn "%s" "Not a currently solved problem"
     stopWatch.Stop()
-    printfn "Milliseconds to solve: %f" stopWatch.Elapsed.TotalMilliseconds
+    printfn "\nMilliseconds to solve: %f" stopWatch.Elapsed.TotalMilliseconds
 
 let validateArgs (args : string array) =
     match args.Length with
     | 1 -> Ok args.[0]
     //| 0 -> Error "Please specify which days problem you want to solve"
-    | 0 -> Ok "3a"
+    | 0 -> Ok "3b"
     | _ -> Error "Cannot pass multiple flags to this program"
 
 [<EntryPoint>]
